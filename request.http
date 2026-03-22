@@ -1,0 +1,71 @@
+### 获取所有电影
+GET http://localhost:8080/movies
+
+### 根据 imdb_id 获取单部电影
+GET http://localhost:8080/movie/tt0111161
+
+### 新增电影
+POST http://localhost:8080/movie/tt9999999
+Content-Type: application/json
+
+{
+	"imdb_id": "tt9999999",
+	"title": "Example Movie",
+	"poster_path": "https://image.tmdb.org/t/p/w300/example.jpg",
+	"youtube_id": "example123",
+	"genre": [
+		{
+			"genre_id": 1,
+			"genre_name": "Comedy"
+		}
+	],
+	"admin_review": "Example review",
+	"ranking": {
+		"ranking_value": 3,
+		"ranking_name": "Okay"
+	}
+}
+
+### 用户注册
+POST http://localhost:8080/register
+Content-Type: application/json
+
+{
+	"first_name": "Tom",
+	"last_name": "Lee",
+	"email": "tomlee@example.com",
+	"password": "123456",
+	"role": "USER",
+	"favourite_genres": [
+		{
+			"genre_id": 1,
+			"genre_name": "Comedy"
+		},
+		{
+			"genre_id": 5,
+			"genre_name": "Thriller"
+		}
+	]
+}
+
+### 用户登录
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+	"email": "bobjones@hotmail.com",
+	"password": "Password1!"
+}
+
+### 获取推荐的电影
+GET http://localhost:8080/recommendedmovies
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImJvYmpvbmVzQGhvdG1haWwuY29tIiwiRmlyc3ROYW1lIjoiQm9iIiwiTGFzdE5hbWUiOiJKb25lcyIsIlJvbGUiOiJBRE1JTiIsIlVzZXJJZCI6IjY4Mzg1Yjk5ODEwOTdjNmI0MDQyZGFiNCIsImlzcyI6Ik1hZ2ljU3RyZWFtIiwiZXhwIjoxNzc0MjU0MzkzLCJpYXQiOjE3NzQxNjc5OTN9.kVRsyxDCO1O2bOjLcMhirkAMFa1z8wz9hcifKjy53U4
+
+### 更新电影评论
+PATCH http://localhost:8080/updatereview/tt0105695
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImJvYmpvbmVzQGhvdG1haWwuY29tIiwiRmlyc3ROYW1lIjoiQm9iIiwiTGFzdE5hbWUiOiJKb25lcyIsIlJvbGUiOiJBRE1JTiIsIlVzZXJJZCI6IjY4Mzg1Yjk5ODEwOTdjNmI0MDQyZGFiNCIsImlzcyI6Ik1hZ2ljU3RyZWFtIiwiZXhwIjoxNzc0MjU0MzkzLCJpYXQiOjE3NzQxNjc5OTN9.kVRsyxDCO1O2bOjLcMhirkAMFa1z8wz9hcifKjy53U4
+Content-Type: application/json
+
+{
+	"admin_review": "Clint Eastwood, as always, was magnificant. What an amazing cast and story!"
+}
