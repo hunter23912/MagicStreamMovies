@@ -69,3 +69,6 @@ Content-Type: application/json
 {
 	"admin_review": "Clint Eastwood, as always, was magnificant. What an amazing cast and story!"
 }
+
+### 获取电影类型
+GET http://localhost:8080/genres

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axiosConfig from "../../api/axiosConfig";
+import axiosClient from "../../api/axiosClient";
 import Movies from "../movies/movies";
 import type { Movie } from "../movie/Movie";
 
@@ -13,7 +13,7 @@ const Home = () => {
       setLoading(true);
       setMessage("");
       try {
-        const response = await axiosConfig.get("/movies");
+        const response = await axiosClient.get("/movies");
         const movieData = Array.isArray(response.data) ? response.data : [];
         setMovies(movieData);
         if (movieData.length === 0) {
