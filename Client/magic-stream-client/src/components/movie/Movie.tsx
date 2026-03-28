@@ -13,7 +13,7 @@ export type MovieType = {
 
 export type MovieProps = {
   movie: MovieType;
-  updateMovieReview: (imdb_id: string) => void;
+  updateMovieReview?: (imdb_id: string) => void;
 };
 
 const Movie = ({ movie, updateMovieReview }: MovieProps) => {
