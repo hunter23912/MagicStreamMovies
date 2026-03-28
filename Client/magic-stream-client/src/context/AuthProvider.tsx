@@ -8,6 +8,8 @@ import {
 
 type AuthUser = {
   first_name: string;
+  token: string;
+  role: string;
 };
 
 export type AuthContextType = {

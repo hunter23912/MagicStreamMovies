@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import axiosClient from "../../api/axiosClient";
 import Movies from "../movies/movies";
-import type { Movie } from "../movie/Movie";
+import type { MovieType } from "../movie/Movie";
 
-const Home = () => {
-  const [movies, setMovies] = useState<Movie[]>([]);
+type HomeProps = {
+  updateMovieReview: (imdb_id: string) => void;
+};
+
+const Home = ({ updateMovieReview }: HomeProps) => {
+  const [movies, setMovies] = useState<MovieType[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -34,7 +38,11 @@ const Home = () => {
       {loading ? (
         <h2>Loading...</h2>
       ) : (
-        <Movies movies={movies} message={message} />
+        <Movies
+          movies={movies}
+          message={message}
+          updateMovieReview={updateMovieReview}
+        />
       )}
     </>
   );

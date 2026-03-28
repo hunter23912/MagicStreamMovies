@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Button, Container, Form } from "react-bootstrap";
 import axiosClient from "../../api/axiosClient";
-import useAuth from "../../hook/userAuth";
+import useAuth from "../../hook/useAuth";
 
 const Login = () => {
   const { setAuth } = useAuth();
@@ -10,7 +10,10 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const from = location.state?.from?.pathname || "/"; // 用户登录成功后重定向回之前试图访问的页面，默认为首页
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,7 +28,7 @@ const Login = () => {
       }
       setAuth(response.data);
       localStorage.setItem("user", JSON.stringify(response.data));
-      navigate("/", { replace: true });
+      navigate(from, { replace: true }); // replace=true表明点击浏览器的后退按钮时不会回到登录页，而是回到登录前的页面
     } catch (err) {
       console.error("Error logging in:", err);
       setError("Invalid email or password.");

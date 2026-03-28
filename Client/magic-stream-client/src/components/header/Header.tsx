@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { useNavigate, NavLink } from "react-router-dom";
-import useAuth from "../../hook/userAuth";
+import useAuth from "../../hook/useAuth";
 
 const Header = () => {
   const navigate = useNavigate();
