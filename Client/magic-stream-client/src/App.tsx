@@ -1,4 +1,4 @@
-import "./App.css";
+// import "./App.css";
 import Home from "./components/home/Home";
 import Recommended from "./components/recommended/Recommended";
 import Review from "./components/review/Review";
@@ -8,17 +8,38 @@ import Header from "./components/header/Header";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import RequireAuth from "./components/RequiredAuth";
+import axiosClient from "./api/axiosConfig";
+import useAuth from "./hook/useAuth";
 
 function App() {
   const navigate = useNavigate();
+  const { auth, setAuth } = useAuth();
 
   const updateMovieReview = (imdb_id: string) => {
     navigate(`/review/${imdb_id}`);
   };
 
+  const handleLogout = async () => {
+    try {
+      if (!auth) {
+        console.error("No user is currently logged in.");
+        return;
+      }
+      const response = await axiosClient.post("/logout", {
+        user_id: auth.user_id,
+      });
+      console.log(response.data);
+      setAuth(null);
+      localStorage.removeItem("user");
+      console.log("User logged out");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
   return (
     <>
-      <Header />
+      <Header handleLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route

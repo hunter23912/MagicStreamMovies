@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -125,11 +126,6 @@ func AdminReviewUpdate(client *mongo.Client) gin.HandlerFunc {
 		var req struct {
 			AdminReview string `json:"admin_review"`
 		}
-		var resp struct {
-			RankingName string `json:"ranking_name"`
-			AdminReview string `json:"admin_review"`
-		}
-
 		if err := c.ShouldBind(&req); err != nil {
 			log.Printf("[AdminReviewUpdate] invalid request body: %v", err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
@@ -169,9 +165,14 @@ func AdminReviewUpdate(client *mongo.Client) gin.HandlerFunc {
 			return
 		}
 
-		resp.RankingName = sentiment
-		resp.AdminReview = req.AdminReview
-		c.JSON(http.StatusOK, resp)
+		var updatedMovie models.Movie
+		if err := movieCollection.FindOne(ctx, filter).Decode(&updatedMovie); err != nil {
+			log.Printf("[AdminReviewUpdate] failed to fetch updated movie %s: %v", movieId, err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch updated movie"})
+			return
+		}
+
+		c.JSON(http.StatusOK, updatedMovie)
 
 	}
 }
@@ -224,7 +225,7 @@ func GetReviewRanking(admin_review string, client *mongo.Client, c *gin.Context)
 		return "", 0, err
 	}
 	response = strings.TrimSpace(response)
-
+	fmt.Println(response)
 	ranVal := 0
 	for _, ranking := range rankings {
 		if ranking.RankingName == response {

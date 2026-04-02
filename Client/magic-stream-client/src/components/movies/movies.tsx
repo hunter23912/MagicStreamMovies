@@ -4,7 +4,7 @@ import type { MovieType } from "../movie/Movie";
 type MoviesProps = {
   movies?: MovieType[];
   message?: string;
-  updateMovieReview: (imdb_id: string) => void;
+  updateMovieReview?: (imdb_id: string) => void;
 };
 
 const Movies = ({ movies, updateMovieReview, message }: MoviesProps) => {

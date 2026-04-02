@@ -10,6 +10,7 @@ type AuthUser = {
   first_name: string;
   token: string;
   role: string;
+  user_id: string;
 };
 
 export type AuthContextType = {

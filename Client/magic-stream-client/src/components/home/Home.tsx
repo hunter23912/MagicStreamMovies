@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axiosClient from "../../api/axiosClient";
+import axiosClient from "../../api/axiosConfig";
 import Movies from "../movies/movies";
 import type { MovieType } from "../movie/Movie";
 

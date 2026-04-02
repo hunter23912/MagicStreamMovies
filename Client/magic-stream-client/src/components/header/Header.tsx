@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { useNavigate, NavLink } from "react-router-dom";
 import useAuth from "../../hook/useAuth";
 
-const Header = () => {
+const Header = ({ handleLogout }: { handleLogout: () => void }) => {
   const navigate = useNavigate();
   const { auth } = useAuth();
 
@@ -30,10 +29,14 @@ const Header = () => {
           <Nav className="ms-auto align-items-center gap-3 gap-lg-2">
             {auth ? (
               <>
-                <span>
+                <span style={{ color: "white" }}>
                   Hello, <strong>{auth.first_name}</strong>
                 </span>
-                <Button variant="outline-light" size="sm">
+                <Button
+                  variant="outline-light"
+                  size="sm"
+                  onClick={handleLogout}
+                >
                   Logout
                 </Button>
               </>

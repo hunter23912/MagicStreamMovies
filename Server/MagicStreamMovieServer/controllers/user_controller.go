@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -124,14 +125,32 @@ func LoginUser(client *mongo.Client) gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update tokens"})
 			return
 		}
+		http.SetCookie(c.Writer, &http.Cookie{
+			Name:     "access_token",
+			Value:    token,
+			Path:     "/",
+			MaxAge:   86400, // 1天时间
+			Secure:   true,
+			HttpOnly: true,
+			SameSite: http.SameSiteNoneMode,
+		})
+		http.SetCookie(c.Writer, &http.Cookie{
+			Name:     "refresh_token",
+			Value:    refreshToken,
+			Path:     "/",
+			MaxAge:   86400, // 1天时间
+			Secure:   true,
+			HttpOnly: true,
+			SameSite: http.SameSiteNoneMode,
+		})
 		c.JSON(http.StatusOK, models.UserResponse{
-			UserId:          foundUser.UserId,
-			FirstName:       foundUser.FirstName,
-			LastName:        foundUser.LastName,
-			Email:           foundUser.Email,
-			Role:            foundUser.Role,
-			Token:           token,
-			RefreshToken:    refreshToken,
+			UserId:    foundUser.UserId,
+			FirstName: foundUser.FirstName,
+			LastName:  foundUser.LastName,
+			Email:     foundUser.Email,
+			Role:      foundUser.Role,
+			// Token:           token,
+			// RefreshToken:    refreshToken,
 			FavouriteGenres: foundUser.FavouriteGenres,
 		})
 	}
@@ -139,23 +158,31 @@ func LoginUser(client *mongo.Client) gin.HandlerFunc {
 
 func LogoutUser(client *mongo.Client) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userId, err := utils.GetUserIdFromContext(c)
+		var UserLogout struct {
+			UserId string `json:"user_id"`
+		}
+		err := c.ShouldBindJSON(&UserLogout)
 		if err != nil {
-			log.Printf("[LogoutUser] failed to get userId from context: %v", err)
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "User Id not found in context"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
 			return
 		}
+		fmt.Println("User ID from Logout request:", UserLogout.UserId)
 
-		ctx, cancel := context.WithTimeout(c.Request.Context(), 100*time.Second)
-		defer cancel()
+		err = utils.UpdateAllTokens(UserLogout.UserId, "", "", client, c)
 
-		var userCollection *mongo.Collection = database.OpenCollection("users", client)
-		_, err = userCollection.UpdateOne(ctx, bson.M{"user_id": userId}, bson.M{"$set": bson.M{"token": "", "refresh_token": "", "updated_at": time.Now()}})
 		if err != nil {
-			log.Printf("[LogoutUser] logout failed for user_id=%s: %v", userId, err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to logout"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error logging out"})
 			return
 		}
+		http.SetCookie(c.Writer, &http.Cookie{
+			Name:     "access_token",
+			Value:    "",
+			Path:     "/",
+			MaxAge:   1,
+			Secure:   true,
+			HttpOnly: true,
+			SameSite: http.SameSiteNoneMode,
+		})
 
 		c.JSON(http.StatusOK, gin.H{"message": "Logged out successfully"})
 	}

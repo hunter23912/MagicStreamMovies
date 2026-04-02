@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Button, Container, Form } from "react-bootstrap";
-import axiosClient from "../../api/axiosClient";
+import axiosClient from "../../api/axiosConfig";
 import useAuth from "../../hook/useAuth";
 
 const Login = () => {
@@ -38,7 +38,10 @@ const Login = () => {
   };
 
   return (
-    <Container className="login-container d-flex align-items-center justify-content-center min-vh-100">
+    <Container
+      fluid
+      className="login-container d-flex align-items-center justify-content-center min-vh-100"
+    >
       <div
         className="login-card shadow p-4 rounded bg-white"
         style={{ maxWidth: 500 }}

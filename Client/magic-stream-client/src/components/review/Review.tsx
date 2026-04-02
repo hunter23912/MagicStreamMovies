@@ -41,18 +41,7 @@ const Review = () => {
       });
       console.log(response.data);
 
-      setMovie((prev) => {
-        if (!prev) return null;
-        return {
-          ...prev,
-          admin_review: response.data?.admin_review ?? prev?.admin_review,
-          ranking: {
-            ranking_name:
-              response.data?.ranking?.ranking_name ??
-              prev?.ranking?.ranking_name,
-          },
-        };
-      });
+      setMovie(response.data);
     } catch (err: any) {
       console.error("Error updating review:", err);
       if (err.response && err.response.status === 401) {
@@ -71,7 +60,7 @@ const Review = () => {
       {loading ? (
         <Spinner />
       ) : (
-        <div className="container py-5">
+        <div className="container py-5 px-3">
           <h2 className="text-center mb-4">Admin Review</h2>
           <div className="row justify-content-center">
             <div className="col-12 col-md-6 d-flex align-items-center justify-content-center mb-4 mb-md-0">
