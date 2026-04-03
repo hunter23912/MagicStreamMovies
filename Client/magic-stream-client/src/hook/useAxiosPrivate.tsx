@@ -44,8 +44,9 @@ const useAxiosPrivate = () => {
   useEffect(() => {
     // 响应拦截器：遇到 401 时尝试用 refresh token 换新 access token。
     const responseInterceptorId = axiosAuth.interceptors.response.use(
-      (response) => response,
+      (response) => response, // 正常响应直接返回
       async (error) => {
+        // 接收axios Error对象则判断是否是token过期导致的 401 错误
         console.log("⚠ Interceptor caught error:", error);
         const originalRequest = error.config as AxiosRequestWithRetry;
 
@@ -53,6 +54,7 @@ const useAxiosPrivate = () => {
           originalRequest?.url?.includes("/refresh") &&
           error.response?.status === 401
         ) {
+          // 如果刷新请求本身就返回 401，说明 refresh token 也无效了，直接清除认证状态并拒绝所有排队请求。
           console.error("❌ Refresh token has expired or is invalid.");
           return Promise.reject(error);
         }
@@ -75,8 +77,7 @@ const useAxiosPrivate = () => {
           originalRequest._retry = true;
           isRefreshingRef.current = true;
 
-          // 这里的 Promise 不是为了“立刻执行”，而是为了把原请求挂起，
-          // 等 refresh 完成后再统一 resolve / reject。
+          // 挂起原请求，/refresh后再resolve / reject。
           return new Promise((resolve, reject) => {
             axiosAuth
               .post("/refresh")
@@ -86,7 +87,6 @@ const useAxiosPrivate = () => {
               })
               .catch((refreshError) => {
                 processQueue(refreshError, null);
-                localStorage.removeItem("user");
                 setAuth(null); // clear auth state
                 reject(refreshError); // fail the original promise chain
               })
@@ -95,7 +95,7 @@ const useAxiosPrivate = () => {
               });
           });
         }
-        return Promise.reject(error);
+        return Promise.reject(error); // 其他错误直接拒绝，不处理。
       },
     );
 

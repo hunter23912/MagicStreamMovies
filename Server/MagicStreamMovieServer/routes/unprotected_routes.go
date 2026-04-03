@@ -12,4 +12,5 @@ func SetupUnprotectedRoutes(router *gin.Engine, client *mongo.Client) {
 	router.POST("/logout", controller.LogoutUser(client))
 	router.GET("/movies", controller.GetMovies(client))
 	router.GET("/genres", controller.GetGenres(client))
+	router.POST("/refresh", controller.RefreshToken(client))
 }

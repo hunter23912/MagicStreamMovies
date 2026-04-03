@@ -1,4 +1,4 @@
-// import "./App.css";
+import "./App.css";
 import Home from "./components/home/Home";
 import Recommended from "./components/recommended/Recommended";
 import Review from "./components/review/Review";
@@ -30,7 +30,6 @@ function App() {
       });
       console.log(response.data);
       setAuth(null);
-      localStorage.removeItem("user");
       console.log("User logged out");
     } catch (error) {
       console.error("Error logging out:", error);

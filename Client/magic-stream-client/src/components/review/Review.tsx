@@ -12,7 +12,7 @@ const Review = () => {
   const [loading, setLoading] = useState(true);
   const revText = useRef<HTMLTextAreaElement>(null);
   const { imdb_id } = useParams();
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const Review = () => {
       console.error("Error updating review:", err);
       if (err.response && err.response.status === 401) {
         console.error("Unauthorized access - redirecting to login");
-        localStorage.removeItem("user");
+        setAuth(null);
       } else {
         console.error("Error updating review:", err);
       }

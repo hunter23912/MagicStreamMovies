@@ -29,7 +29,7 @@ const Header = ({ handleLogout }: { handleLogout: () => void }) => {
           <Nav className="ms-auto align-items-center gap-3 gap-lg-2">
             {auth ? (
               <>
-                <span style={{ color: "white" }}>
+                <span className="me-3 text-light">
                   Hello, <strong>{auth.first_name}</strong>
                 </span>
                 <Button

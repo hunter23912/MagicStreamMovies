@@ -27,7 +27,6 @@ const Login = () => {
         return;
       }
       setAuth(response.data);
-      localStorage.setItem("user", JSON.stringify(response.data));
       navigate(from, { replace: true }); // replace=true表明点击浏览器的后退按钮时不会回到登录页，而是回到登录前的页面
     } catch (err) {
       console.error("Error logging in:", err);
