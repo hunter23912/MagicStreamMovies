@@ -22,7 +22,7 @@
 
 - 将`mongodb`数据库部署到`atlas`平台
 - 将`gin`后端部署到`reder`平台
-- 将`react`前端部署到`versel`平台
+- 将`react`前端部署到`vercel`平台
 
 #### 将本地mongodb数据导出
 

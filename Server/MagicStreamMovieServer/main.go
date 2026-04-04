@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
+	"strings"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -15,20 +17,47 @@ import (
 )
 
 func main() {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Println("Warning: unable to find .env file")
+	}
+
+	// 支持通过环境变量设置 GIN_MODE（release|debug|test），默认为 debug
+	mode := os.Getenv("GIN_MODE")
+	if mode == "" {
+		mode = gin.DebugMode
+	}
+	gin.SetMode(mode)
+
 	router := gin.Default()
+
+	allowOrigins := []string{"http://localhost:5173"}
+	if v := os.Getenv("ALLOW_ORIGINS"); v != "" {
+		parts := strings.Split(v, ",")
+		tmp := make([]string, 0, len(parts))
+		for _, p := range parts {
+			p = strings.TrimSpace(p)
+			if p != "" {
+				tmp = append(tmp, p)
+			}
+		}
+		if len(tmp) > 0 {
+			allowOrigins = tmp
+		}
+	}
+
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowOrigins:     allowOrigins,
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		MaxAge:           time.Hour * 12,
 	}))
-	router.Use(gin.Logger())
 
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Println("Warning: unable to find .env file")
+	// 在非 release 模式下使用 gin.Logger；生产环境可使用更完善的日志方案
+	if gin.Mode() != gin.ReleaseMode {
+		router.Use(gin.Logger())
 	}
 
 	var client *mongo.Client = database.Connect()
