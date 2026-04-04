@@ -2,6 +2,8 @@
 
 > 记录个人的`react`和`gin`学习历程
 
+## 现已可访问： https://magic-stream-movies-tau.vercel.app
+
 ### 网站架构
 
 - 前端：`react`框架
