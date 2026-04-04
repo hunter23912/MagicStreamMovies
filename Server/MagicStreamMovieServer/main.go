@@ -47,7 +47,7 @@ func main() {
 	routes.SetupProtectedRoutes(router, client)
 
 	// 为每个http请求启动一个新的goroutine
-	if err := router.Run("localhost:8080"); err != nil {
+	if err := router.Run(":8080"); err != nil {
 		fmt.Println("Failed to start server", err)
 	}
 }

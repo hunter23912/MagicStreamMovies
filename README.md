@@ -17,3 +17,13 @@
 6. `useEffect`处理副作用，像请求数据、订阅事件、操作 DOM、定时器这类“渲染之外的事”都放这里。
 7. 状态提升和 `hooks` 复用，多个组件共享数据时把状态提到共同父组件，重复逻辑则抽成自定义 `hooks`。
 8. 不可变更新和 `key`，更新数组对象时不要直接改原值，列表渲染时要写好 `key`，否则容易出 bug。
+
+### 部署步骤
+
+- 将`mongodb`数据库部署到`atlas`平台
+- 将`gin`后端部署到`reder`平台
+- 将`react`前端部署到`versel`平台
+
+#### 将本地mongodb数据导出
+
+- mongodump --uri="mongodb://localhost:27017/magic-stream-movies" --out=./dump
