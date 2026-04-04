@@ -2,6 +2,7 @@ import axiosClient from "../../api/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
+import logo from "../../assets/logo.svg";
 
 type Genre = {
   genre_id: number;
@@ -89,7 +90,7 @@ const Register = () => {
         style={{ maxWidth: 500, width: "100%" }}
       >
         <div className="text-center mb-4">
-          {/* <img src={logo} alt="Logo" width={60} className="mb-2" /> */}
+          <img src={logo} alt="Logo" width={60} className="mb-2" />
           <h2 className="fw-bold">Register</h2>
           <p className="text-muted">Create your Magic Movie Stream account.</p>
           {error && <div className="alert alert-danger py-2">{error}</div>}

@@ -1,6 +1,7 @@
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { useNavigate, NavLink } from "react-router-dom";
 import useAuth from "../../hook/useAuth";
+import logo from "../../assets/logo.svg";
 
 const Header = ({ handleLogout }: { handleLogout: () => void }) => {
   const navigate = useNavigate();
@@ -15,7 +16,15 @@ const Header = ({ handleLogout }: { handleLogout: () => void }) => {
       className="shadow-sm"
     >
       <Container>
-        <Navbar.Brand>Magic Stream</Navbar.Brand>
+        <Navbar.Brand>
+          <img
+            alt="logo"
+            src={logo}
+            className="d-inline-block align-top me-2"
+            style={{ width: "30px", height: "30px" }}
+          />
+          Magic Stream
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="main-navbar-nav" />
         <Navbar.Collapse id="main-navbar-nav">
           <Nav className="me-auto">

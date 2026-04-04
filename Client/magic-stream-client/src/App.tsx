@@ -5,6 +5,7 @@ import Review from "./components/review/Review";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import Header from "./components/header/Header";
+import StreamMovie from "./components/stream/StreamMovie";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import RequireAuth from "./components/RequiredAuth";
@@ -50,6 +51,7 @@ function App() {
           <Route element={<RequireAuth />}>
             <Route path="/recommended" element={<Recommended />} />
             <Route path="/review/:imdb_id" element={<Review />} />
+            <Route path="/stream/:yt_id" element={<StreamMovie />} />
           </Route>
         </Route>
       </Routes>
