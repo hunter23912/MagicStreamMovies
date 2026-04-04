@@ -1,7 +1,7 @@
 package database
 
 import (
-	"fmt"
+	// "fmt"
 	"log"
 	"os"
 
@@ -22,7 +22,7 @@ func Connect() *mongo.Client {
 		log.Fatal("MONGODB_URI not set!")
 	}
 
-	fmt.Println("MongoDB URI: ", MongoDb)
+	// fmt.Println("MongoDB URI: ", MongoDb)
 
 	clientOptions := options.Client().ApplyURI(MongoDb)
 
@@ -41,7 +41,7 @@ func OpenCollection(collectionName string, client *mongo.Client) *mongo.Collecti
 
 	databaseName := os.Getenv("DATABASE_NAME")
 
-	fmt.Println("DATABASE_NAME: ", databaseName)
+	// fmt.Println("DATABASE_NAME: ", databaseName)
 
 	collection := client.Database(databaseName).Collection(collectionName)
 
